@@ -1,0 +1,27 @@
+{
+    "name": "nodejs-express-utils",
+    "version": "1.0.0",
+    "description": "A package defining some Nodejs Express Utils (MiddleWares, MYSQL utils, …etc.)",
+    "main": "src/app.ts",
+    "scripts": {
+        "start": "rm -rf ./build && tsc && node ./build/server",
+        "dev": "nodemon ./src/server.ts",
+        "build": "rm -rf ./build && tsc",
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mmzaghlool/Nodejs-Express-Utils.git"
+    },
+    "keywords": [
+        "nodejs",
+        "mysql",
+        "meddleWare"
+    ],
+    "author": "mmzaghlool52@gmail.com",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/mmzaghlool/Nodejs-Express-Utils/issues"
+    },
+    "homepage": "https://github.com/mmzaghlool/Nodejs-Express-Utils#readme"
+}
