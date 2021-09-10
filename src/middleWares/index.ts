@@ -1,4 +1,4 @@
-import xssFilter from './XSSFilter';
+import xssFilter from './xssFilter';
 import {inputJoi} from './input';
 import handleResponse, {badRequestResponse, errorResponse, formBadRequest, successResponse} from './responseShaper';
 
