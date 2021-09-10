@@ -23,5 +23,19 @@
     "bugs": {
         "url": "https://github.com/mmzaghlool/Nodejs-Express-Utils/issues"
     },
-    "homepage": "https://github.com/mmzaghlool/Nodejs-Express-Utils#readme"
+    "homepage": "https://github.com/mmzaghlool/Nodejs-Express-Utils#readme",
+    "devDependencies": {
+        "@types/jest": "^27.0.1",
+        "@types/mysql": "^2.15.19",
+        "@typescript-eslint/parser": "^4.31.0",
+        "@vue/eslint-config-typescript": "^7.0.0",
+        "eslint": "^7.32.0",
+        "eslint-config-google": "^0.14.0",
+        "ts-node": "^10.2.1",
+        "typescript": "^4.4.2"
+    },
+    "dependencies": {
+        "mysql": "^2.18.1",
+        "xss-filters": "^1.2.7"
+    }
 }
