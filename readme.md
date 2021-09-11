@@ -2,6 +2,101 @@
 
 A package to containing some useful utils for nodejs apps
 
+## A full example
+
+`app.ts "App entry point"`
+
+```js
+import express from 'express';
+import {middleWares} from 'nodejs-express-utils';
+import index from './routes';
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+// XSS Filter
+app.use(middleWares.xssFilter());
+
+index('/v1', app);
+
+export default app;
+```
+
+`routes/index.ts "routes entry point"`
+
+```js
+import test from './test';
+
+/**
+ * Main routes entry point
+ *
+ * @param {string} baseURL The base added to the start of the route
+ * @param {any} app
+ */
+export default function (baseURL: string, app: any) {
+    app.use(baseURL + '/test', test);
+
+    // ... rest of your routes
+
+    // 404 Not Found Route
+    app.all('*', (_, res) => res.status(404).json({success: false, code: 'NOT_FOUND'}));
+}
+```
+
+`routes/test.ts`
+
+```js
+import express from 'express';
+import {middleWares} from 'nodejs-express-utils';
+const app = express();
+
+app.get(
+    '/:userId/:timestamp',
+    // Validation middleware with joi
+    middleWares.inputJoi(extendedJoi.object({
+        userId: extendedJoi.id().required(),
+        timestamp: extendedJoi.timestamp().required(),
+    })),
+    middleWares.handleResponse((data) => {
+        const {userId, timestamp} = data;
+        // your code here
+
+        return  {results: {}}
+    }),
+);
+```
+
+## Promise example
+
+`routes/test.ts`
+
+```js
+import express from 'express';
+import {middleWares} from 'nodejs-express-utils';
+const app = express();
+
+app.get(
+    '/:userId/:timestamp',
+    // Validation middleware with joi
+    middleWares.inputJoi(extendedJoi.object({
+        userId: extendedJoi.id().required(),
+        timestamp: extendedJoi.timestamp().required(),
+    })),
+    middleWares.handleResponse((data) => {
+        const {userId, timestamp} = data;
+        
+        return new Promise((resolve, reject) => {
+            // your code here
+            
+            resolve({results: {}})
+        })
+
+    }),
+);
+```
+
 ## MiddleWares
 
 ### xssFilter

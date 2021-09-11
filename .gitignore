@@ -3,6 +3,7 @@
 
 # production
 /build
+/test
 
 # misc
 .env
