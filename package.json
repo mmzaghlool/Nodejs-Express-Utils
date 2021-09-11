@@ -1,11 +1,11 @@
 {
     "name": "nodejs-express-utils",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "A package defining some Nodejs Express Utils (MiddleWares, MYSQL utils, …etc.)",
     "main": "build/index.js",
     "module": "build/index.js",
     "scripts": {
-        "dev": "nodemon ./app.ts",
+        "dev": "nodemon ./test/app.ts",
         "build": "rm -rf ./build && tsc",
         "test": "jest"
     },

@@ -49,7 +49,7 @@ export default function (baseURL: string, app: any) {
 
 ```js
 import express from 'express';
-import {middleWares} from 'nodejs-express-utils';
+import {middleWares, extendedJoi} from 'nodejs-express-utils';
 const app = express();
 
 app.get(
@@ -74,7 +74,7 @@ app.get(
 
 ```js
 import express from 'express';
-import {middleWares} from 'nodejs-express-utils';
+import {middleWares, extendedJoi} from 'nodejs-express-utils';
 const app = express();
 
 app.get(
@@ -89,7 +89,7 @@ app.get(
         
         return new Promise((resolve, reject) => {
             // your code here
-            
+
             resolve({results: {}})
         })
 

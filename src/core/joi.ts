@@ -2,10 +2,90 @@
 /* eslint-disable max-len */
 import Joi from 'joi';
 
-function buildJoiWithExtensions() {
-    let extendedJoi = Joi;
+interface ExtendedInterface extends Joi.Root {
+    /**
+     * Generates a schema object that matches a timestamp (Numeric value between 1466908276 and 1700000000).
+     */
+    timestamp(): Joi.Root;
 
-    extendedJoi = extendedJoi.extend((joi) => ({
+    /**
+     * Generates a schema object that matches a MYSQL AI id (Numeric value between 1 and 9999999999).
+     */
+    id(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches a firebase uid (string with length of 28 and only contain alphanumeric).
+     */
+    uid(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the Egyptian National id.
+     */
+    nid(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the uuid.
+     */
+    uuid(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the Egyptian landline Phone.
+     */
+    landPhone(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the Egyptian cell Phone.
+     */
+    cellPhone(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the emails.
+     */
+    email(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the english alphabetic only.
+     */
+    english(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the arabic alphabetic only.
+     */
+    arabic(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the english alphabetic with spaces.
+     */
+    extraEnglish(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the arabic alphabetic with spaces.
+     */
+    extraArabic(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the date 'YYYY-MM-DD'.
+     */
+    extendedDate(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the ip v4.
+     */
+    ip(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the package names.
+     */
+    packageName(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches the links.
+     */
+    extendedLink(): Joi.Root;
+}
+
+function buildJoiWithExtensions() {
+    let extendedJoi: ExtendedInterface = Joi.extend((joi) => ({
         type: 'timestamp',
         base: joi.number().min(1466908276).max(1700000000),
     }));
@@ -25,7 +105,7 @@ function buildJoiWithExtensions() {
         base: joi
             .string()
             .pattern(
-                /^(2|3)[0-9][0-9][0-1][1-9][0-3][1-9](01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d\d\d\d\d$/,
+                /^(2|3)[0-9][0-9][0-1][0-9][0-3][0-9](01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d\d\d\d\d$/,
             ),
     }));
 
@@ -74,7 +154,7 @@ function buildJoiWithExtensions() {
     }));
 
     extendedJoi = extendedJoi.extend((joi) => ({
-        type: 'date',
+        type: 'extendedDate',
         base: joi.string().pattern(/^(19|20)[0-9][0-9][-\\/. ](0[1-9]|1[012])[-\\/. ](0[1-9]|[12][0-9]|3[01])$/),
     }));
 
@@ -93,7 +173,7 @@ function buildJoiWithExtensions() {
     }));
 
     extendedJoi = extendedJoi.extend((joi) => ({
-        type: 'link',
+        type: 'extendedLink',
         base: joi
             .string()
             .pattern(
