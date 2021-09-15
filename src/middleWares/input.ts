@@ -22,7 +22,7 @@ app.get(
  */
 function inputJoi(schema: Schema) {
     return function (req: Request, res: Response, next: NextFunction) {
-        const data = {...req.body, ...req.query, ...req.params, originalUrl: req.originalUrl};
+        const data = {...req.body, ...req.query, ...req.params};
 
         validate(schema, data)
             .then((values) => {
