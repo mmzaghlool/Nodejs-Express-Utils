@@ -1,6 +1,6 @@
 {
     "name": "nodejs-express-utils",
-    "version": "1.0.5",
+    "version": "1.1.2",
     "description": "A package defining some Nodejs Express Utils (MiddleWares, MYSQL utils, …etc.)",
     "main": "build/index.js",
     "module": "build/index.js",
@@ -10,10 +10,6 @@
         "buildWatch": "tsc -w",
         "test": "jest"
     },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/mmzaghlool/Nodejs-Express-Utils.git"
-    },
     "keywords": [
         "nodejs",
         "mysql",
@@ -21,10 +17,7 @@
     ],
     "author": "mmzaghlool52@gmail.com",
     "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/mmzaghlool/Nodejs-Express-Utils/issues"
-    },
-    "homepage": "https://github.com/mmzaghlool/Nodejs-Express-Utils#readme",
+    "homepage": "https://github.com/mmzaghlool",
     "devDependencies": {
         "@types/express": "^4.17.13",
         "@types/jest": "^27.0.1",

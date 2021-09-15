@@ -2,115 +2,17 @@
 
 A package to containing some useful utils for nodejs apps
 
-1. [A full example](#a-full-example)
-2. [Promise example](#promise-example)
-3. [MySQL](#mysql)
+1. [MySQL](#mysql)
     1. [Defining the database constrains](#defining-the-database-constrains)
     2. [Defining Models](#defining-models)
     3. [Using Models](#using-models)
-4. [MiddleWares](#middlewares)
+2. [MiddleWares](#middlewares)
     1. [XSS Filter](#xss-filter)
     2. [Response Shaper](#response-shaper)
     3. [Input](#input)
-5. [Extended Joi](#extended-joi)
-
-## A full example
-
-`app.ts "App entry point"`
-
-```ts
-import express from 'express';
-import {middleWares} from 'nodejs-express-utils';
-import index from './routes';
-
-const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
-
-// XSS Filter
-app.use(middleWares.xssFilter());
-
-index('/v1', app);
-
-export default app;
-```
-
-`routes/index.ts "routes entry point"`
-
-```ts
-import test from './test';
-
-/**
- * Main routes entry point
- *
- * @param {string} baseURL The base added to the start of the route
- * @param {any} app
- */
-export default function (baseURL: string, app: any) {
-    app.use(baseURL + '/test', test);
-
-    // ... rest of your routes
-
-    // 404 Not Found Route
-    app.all('*', (_, res) => res.status(404).json({success: false, code: 'NOT_FOUND'}));
-}
-```
-
-`routes/test.ts`
-
-```ts
-import express from 'express';
-import {middleWares, extendedJoi} from 'nodejs-express-utils';
-const app = express();
-
-app.get(
-    '/:userId/:timestamp',
-    // Validation middleware with joi
-    middleWares.inputJoi(
-        extendedJoi.object({
-            userId: extendedJoi.id().required(),
-            timestamp: extendedJoi.timestamp().required(),
-        }),
-    ),
-    middleWares.handleResponse((data) => {
-        const {userId, timestamp} = data;
-        // your code here
-
-        return {results: {}};
-    }),
-);
-```
-
-## Promise example
-
-`routes/test.ts`
-
-```ts
-import express from 'express';
-import {middleWares, extendedJoi} from 'nodejs-express-utils';
-const app = express();
-
-app.get(
-    '/:userId/:timestamp',
-    // Validation middleware with joi
-    middleWares.inputJoi(
-        extendedJoi.object({
-            userId: extendedJoi.id().required(),
-            timestamp: extendedJoi.timestamp().required(),
-        }),
-    ),
-    middleWares.handleResponse((data) => {
-        const {userId, timestamp} = data;
-
-        return new Promise((resolve, reject) => {
-            // your code here
-
-            resolve({results: {}});
-        });
-    }),
-);
-```
+3. [Extended Joi](#extended-joi)
+4. [A full example](#a-full-example)
+5. [Promise example](#promise-example)
 
 ## MySQL
 
@@ -338,4 +240,102 @@ Added functions
 import {extendedJoi, middleWares} from 'nodejs-express-utils';
 
 app.get('/', middleWares.inputJoi(extendedJoi.object({name: extendedJoi.string().required()})));
+```
+
+## A full example
+
+`app.ts "App entry point"`
+
+```ts
+import express from 'express';
+import {middleWares} from 'nodejs-express-utils';
+import index from './routes';
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+// XSS Filter
+app.use(middleWares.xssFilter());
+
+index('/v1', app);
+
+export default app;
+```
+
+`routes/index.ts "routes entry point"`
+
+```ts
+import test from './test';
+
+/**
+ * Main routes entry point
+ *
+ * @param {string} baseURL The base added to the start of the route
+ * @param {any} app
+ */
+export default function (baseURL: string, app: any) {
+    app.use(baseURL + '/test', test);
+
+    // ... rest of your routes
+
+    // 404 Not Found Route
+    app.all('*', (_, res) => res.status(404).json({success: false, code: 'NOT_FOUND'}));
+}
+```
+
+`routes/test.ts`
+
+```ts
+import express from 'express';
+import {middleWares, extendedJoi} from 'nodejs-express-utils';
+const app = express();
+
+app.get(
+    '/:userId/:timestamp',
+    // Validation middleware with joi
+    middleWares.inputJoi(
+        extendedJoi.object({
+            userId: extendedJoi.id().required(),
+            timestamp: extendedJoi.timestamp().required(),
+        }),
+    ),
+    middleWares.handleResponse((data) => {
+        const {userId, timestamp} = data;
+        // your code here
+
+        return {results: {}};
+    }),
+);
+```
+
+## Promise example
+
+`routes/test.ts`
+
+```ts
+import express from 'express';
+import {middleWares, extendedJoi} from 'nodejs-express-utils';
+const app = express();
+
+app.get(
+    '/:userId/:timestamp',
+    // Validation middleware with joi
+    middleWares.inputJoi(
+        extendedJoi.object({
+            userId: extendedJoi.id().required(),
+            timestamp: extendedJoi.timestamp().required(),
+        }),
+    ),
+    middleWares.handleResponse((data) => {
+        const {userId, timestamp} = data;
+
+        return new Promise((resolve, reject) => {
+            // your code here
+
+            resolve({results: {}});
+        });
+    }),
+);
 ```
