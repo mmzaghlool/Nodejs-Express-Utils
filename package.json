@@ -1,12 +1,13 @@
 {
     "name": "nodejs-express-utils",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "description": "A package defining some Nodejs Express Utils (MiddleWares, MYSQL utils, …etc.)",
     "main": "build/index.js",
     "module": "build/index.js",
     "scripts": {
         "dev": "nodemon ./test/app.ts",
         "build": "rm -rf ./build && tsc",
+        "buildWatch": "tsc -w",
         "test": "jest"
     },
     "repository": {
