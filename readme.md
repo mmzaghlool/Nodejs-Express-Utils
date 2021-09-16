@@ -14,11 +14,11 @@ A package to containing some useful utils for nodejs apps
 4. [A full example](#a-full-example)
 5. [Promise example](#promise-example)
 
-## MySQL
+## [MySQL](#mysql)
 
 An ORM to be used on MySQL servers with built in methods for encryption and decryption using AES algorithms
 
-### Defining the database constrains
+### [Defining the database constrains](#defining-the-database-constrains)
 
 First we need to initialize the connection to the database server and the key used to encrypt and decrypt the encrypted fields. I would recommend separating this code in separate file in the core folder in your backend for example i will define it here:
 `/src/core/database.ts`
@@ -41,7 +41,7 @@ const database = new MySQL(config, encryptionKey);
 export default database;
 ```
 
-### Defining Models
+### [Defining Models](#defining-models)
 
 Next we need to define our model classes. Every model should define only one of the database table.
 I suggest defining it in separate folder for example i would define all models under `/src/models/`.
@@ -107,7 +107,7 @@ export default database.init<ContactUsType>(tableName, {
 });
 ```
 
-### Using Models
+### [Using Models](#using-models)
 
 After creating the models now we can use it in our code to insert, get, update the data in the database. We can use the following methods:
 
@@ -168,9 +168,9 @@ ContactUs.update(data, extraQuery)
     .catch((err) => console.error(err));
 ```
 
-## MiddleWares
+## [MiddleWares](#middlewares)
 
-### XSS Filter
+### [XSS Filter](#xss-filter)
 
 A middleware that used to filter the xss attacks
 
@@ -182,7 +182,7 @@ const app = express();
 app.use(middleWares.xssFilter());
 ```
 
-### Response Shaper
+### [Response Shaper](#response-shaper)
 
 Response handler it takes a function and shape the response
 if it succeeded it will send res 200 and of an error happened it will send status 500
@@ -202,7 +202,7 @@ app.get(
 );
 ```
 
-### Input
+### [Input](#input)
 
 a joi validator used takes a joi schema and validate it.
 
@@ -214,7 +214,7 @@ const app = express();
 app.get('/', middleWares.inputJoi(extendedJoi.object({})));
 ```
 
-## Extended Joi
+## [Extended Joi](#extended-joi)
 
 Extended from Joi add added some functions
 
@@ -242,7 +242,7 @@ import {extendedJoi, middleWares} from 'nodejs-express-utils';
 app.get('/', middleWares.inputJoi(extendedJoi.object({name: extendedJoi.string().required()})));
 ```
 
-## A full example
+## [A full example](#a-full-example)
 
 `app.ts "App entry point"`
 
@@ -310,7 +310,7 @@ app.get(
 );
 ```
 
-## Promise example
+## [Promise example](#promise-example)
 
 `routes/test.ts`
 
