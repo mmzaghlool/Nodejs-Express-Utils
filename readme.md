@@ -2,6 +2,36 @@
 
 A package to containing some useful utils for nodejs apps
 
+[![NPM](https://img.shields.io/npm/v/nodejs-express-utils.svg)](https://www.npmjs.com/package/nodejs-express-utils)
+[![NPM](https://img.shields.io/npm/dt/nodejs-express-utils.svg)](https://www.npmjs.com/package/nodejs-express-utils.svg)
+
+## Installation
+
+```bash
+npm i nodejs-express-utils
+```
+
+## Importing
+
+### Commonjs
+
+```javascript
+const {DataTypes, MySQL, extendedJoi, formBadRequest, middleWares, JOIN_TYPES} = require('nodejs-express-utils');
+```
+
+### ES6
+
+```javascript
+import {DataTypes, MySQL, extendedJoi, formBadRequest, middleWares, JOIN_TYPES} from 'nodejs-express-utils';
+```
+
+## Reach Me
+
+If you need to report an issue or have suggestions feel free to contact me
+
+<a href="https://www.linkedin.com/in/mmzaghlool/"><img align="center" src="https://icon-library.com/images/linkedin-icon-png-transparent-background/linkedin-icon-png-transparent-background-15.jpg" alt="LinkedIn profile" height="40" width="40" /></a>
+<a href="mailto:mmzaghlool52@gmail.com"><img align="center" src="https://cdn.iconscout.com/icon/free/png-256/gmail-2981844-2476484.png" alt="Gmai account" height="40" width="40" /></a>
+
 1. [MySQL](#mysql)
     1. [Defining the database constrains](#defining-the-database-constrains)
     2. [Defining Models](#defining-models)

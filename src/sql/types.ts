@@ -13,6 +13,7 @@ export interface SchemaField {
     isRequired: boolean;
 }
 export type DatabaseSchema = {[key: string]: SchemaField};
+export type JoinedSchemasType = {schema: DatabaseSchema; condition: string; tableName: string; alias?: string}[];
 export interface MySQLConfig extends mysql.ConnectionConfig {}
 
 enum DataTypes {

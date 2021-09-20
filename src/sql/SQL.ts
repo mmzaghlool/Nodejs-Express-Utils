@@ -1,7 +1,7 @@
 import mysql, {MysqlError} from 'mysql';
 import SequelTable from './SequelTable';
 import {MySQLConfig, DatabaseSchema, getColumnsType, paramsType, insertReturnType, updateColumnsType} from './types';
-import {parseQuery} from './utils';
+import {decrypt, parseQuery} from './utils';
 
 export default class MySQL {
     private database: mysql.Connection;
@@ -80,10 +80,11 @@ export default class MySQL {
                 tableAlias = tableAlias || tableName;
 
                 for (const {name, isEncrypted, custom, as} of columns) {
-                    if (isEncrypted === true && as !== undefined) {
-                        query = query.concat(` &${name},`);
-                    } else if (isEncrypted === true) {
-                        query = query.concat(` &${name},`);
+                    if (isEncrypted === true) {
+                        // query = query.concat(` &${tableAlias}.${name},`);
+                        query = query.concat(
+                            ` CAST(${decrypt(`${tableAlias}.${name}`, this.encryptionKey)} AS ${schema[name].type}),`,
+                        );
                     } else if (custom !== undefined) {
                         query = query.concat(` ${custom},`);
                     } else {
