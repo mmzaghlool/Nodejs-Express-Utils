@@ -66,6 +66,7 @@ export default class SequelTable<T> {
         }
         query = query.concat(extraQuery);
 
+        this._joinedSchemas = [];
         return _mysql.getCustomData(jSchema, tables, query, params);
     }
 
