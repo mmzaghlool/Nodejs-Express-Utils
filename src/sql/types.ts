@@ -1,4 +1,6 @@
 import mysql from 'mysql';
+import {JOIN_TYPES} from '.';
+import SequelTable from './SequelTable';
 
 export type getColumnsType = {name: string; isEncrypted?: boolean; custom?: string; as?: string}[];
 export type insertColumnsType = {name: string; value: string | number | boolean | null; isEncrypted?: boolean}[];
@@ -13,7 +15,29 @@ export interface SchemaField {
     isRequired: boolean;
 }
 export type DatabaseSchema = {[key: string]: SchemaField};
-export type JoinedSchemasType = {schema: DatabaseSchema; condition: string; tableName: string; alias?: string}[];
+export type JoinedSchemasType = {
+    schema: DatabaseSchema;
+    condition: string;
+    tableName: string;
+    alias?: string;
+    columnsAlias?: {[key: string]: string}[];
+}[];
+
+export type MasterTableType = {
+    table: SequelTable<any>;
+    tableAlias?: string;
+    reqColumns?: string[];
+    columnsAlias?: {[key: string]: string};
+};
+
+export type JoinedTablesType = {
+    table: SequelTable<any>;
+    joinType: JOIN_TYPES;
+    joinCondition: string;
+    tableAlias?: string;
+    reqColumns?: string[];
+    columnsAlias?: {[key: string]: string};
+}[];
 export interface MySQLConfig extends mysql.ConnectionConfig {}
 
 enum DataTypes {

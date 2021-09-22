@@ -5,7 +5,6 @@ import {
     DatabaseSchema,
     insertReturnType,
     updateColumnsType,
-    SchemaField,
     JoinedSchemasType,
 } from './types';
 
@@ -40,10 +39,22 @@ export default class SequelTable<T> {
         return this._schema;
     }
 
-    public join(table: SequelTable<any>, type: JOIN_TYPES, joinCondition: string, tableAlias?: string) {
+    public join(
+        table: SequelTable<any>,
+        type: JOIN_TYPES,
+        joinCondition: string,
+        tableAlias?: string,
+        columnsAlias?: {[key: string]: string}[],
+    ) {
         const condition = ` ${type} ${table.tableName} ${tableAlias || ''} ON ${joinCondition} `;
 
-        this._joinedSchemas.push({schema: table.schema, tableName: table.tableName, condition, alias: tableAlias});
+        this._joinedSchemas.push({
+            schema: table.schema,
+            tableName: table.tableName,
+            condition,
+            alias: tableAlias,
+            columnsAlias,
+        });
         this._joinedSchemas.push(...table.joinedSchemas);
 
         return this;
@@ -57,7 +68,8 @@ export default class SequelTable<T> {
         let jSchema = _schema;
 
         for (let i = 0; i < _joinedSchemas.length; i++) {
-            const {condition, schema, alias, tableName} = _joinedSchemas[i];
+            // TODO:
+            const {condition, schema, alias, tableName, columnsAlias} = _joinedSchemas[i];
 
             tables.push({columns: this.getColumns(schema, reqColumns), tableName, tableAlias: alias});
             query = query.concat(condition);

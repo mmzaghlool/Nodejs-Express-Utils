@@ -1,6 +1,17 @@
 import mysql, {MysqlError} from 'mysql';
+import {JOIN_TYPES} from '.';
 import SequelTable from './SequelTable';
-import {MySQLConfig, DatabaseSchema, getColumnsType, paramsType, insertReturnType, updateColumnsType} from './types';
+import {
+    MySQLConfig,
+    DatabaseSchema,
+    getColumnsType,
+    paramsType,
+    insertReturnType,
+    updateColumnsType,
+    JoinedSchemasType,
+    JoinedTablesType,
+    MasterTableType,
+} from './types';
 import {decrypt, parseQuery} from './utils';
 
 export default class MySQL {
@@ -12,8 +23,71 @@ export default class MySQL {
         this.encryptionKey = encryptionKey;
     }
 
+    private getColumns(schema: DatabaseSchema, reqColumns?: string[], columnsAlias: {[key: string]: string} = {}) {
+        const columns: getColumnsType = [];
+
+        for (const fieldName in schema) {
+            if (typeof schema[fieldName] !== 'undefined' && (!reqColumns || reqColumns.includes(fieldName))) {
+                const alias = columnsAlias[fieldName];
+
+                columns.push({
+                    name: fieldName,
+                    as: alias ? alias : fieldName,
+                    isEncrypted: schema[fieldName].isEncrypted,
+                });
+            } else if (typeof schema[fieldName] === 'undefined') {
+                throw new Error(`Schema dose not contain fieldName: ${fieldName}`);
+            }
+        }
+
+        return columns;
+    }
+
     init<T>(tableName: string, schema: DatabaseSchema): SequelTable<T> {
         return new SequelTable<T>(tableName, schema, this);
+    }
+
+    public executeJoin(
+        masterTable: MasterTableType,
+        joinTables: JoinedTablesType,
+        extraQuery: string = '',
+        params: paramsType = {},
+    ) {
+        const tables: {columns: getColumnsType; tableName: string; tableAlias?: string}[] = [];
+        const {table: msTable, columnsAlias, reqColumns, tableAlias} = masterTable;
+
+        tables.push({
+            columns: this.getColumns(msTable.schema, reqColumns, columnsAlias),
+            tableName: msTable.tableName,
+            tableAlias,
+        });
+        let query = '';
+        let jSchema = msTable.schema;
+        // let joined;
+
+        for (let i = 0; i < joinTables.length; i++) {
+            const {joinCondition, table, joinType, columnsAlias, tableAlias, reqColumns} = joinTables[i];
+            const condition = ` ${joinType} ${table.tableName} ${tableAlias || ''} ON ${joinCondition} `;
+
+            // if (i === 0) {
+            //     joined = msTable.join(table, joinType, condition, tableAlias);
+            // } else if (joined !== undefined) {
+            //     joined = joined.join(table, joinType, condition, tableAlias);
+            // }
+
+            tables.push({
+                columns: this.getColumns(table.schema, reqColumns, columnsAlias),
+                tableName: table.tableName,
+                tableAlias,
+            });
+
+            query = query.concat(condition);
+
+            jSchema = {...jSchema, ...table.schema};
+        }
+        query = query.concat(extraQuery);
+
+        return this.getCustomData(jSchema, tables, query, params);
     }
 
     public static getColumns(schema: DatabaseSchema, tableName: string, as?: string, reqColumns?: string[]) {
@@ -101,6 +175,8 @@ export default class MySQL {
 
             query = query.substring(0, query.length - 1);
             query = query.concat(` FROM !tableName ${tableAlias} ${extraQuery} ;`);
+
+            console.log(query);
 
             this.executeQuery(query, {...params, tableName}, schema)
                 .then((result: any[]) => resolve(result))
