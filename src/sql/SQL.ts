@@ -63,17 +63,10 @@ export default class MySQL {
         });
         let query = '';
         let jSchema = msTable.schema;
-        // let joined;
 
         for (let i = 0; i < joinTables.length; i++) {
             const {joinCondition, table, joinType, columnsAlias, tableAlias, reqColumns} = joinTables[i];
             const condition = ` ${joinType} ${table.tableName} ${tableAlias || ''} ON ${joinCondition} `;
-
-            // if (i === 0) {
-            //     joined = msTable.join(table, joinType, condition, tableAlias);
-            // } else if (joined !== undefined) {
-            //     joined = joined.join(table, joinType, condition, tableAlias);
-            // }
 
             tables.push({
                 columns: this.getColumns(table.schema, reqColumns, columnsAlias),
@@ -174,7 +167,7 @@ export default class MySQL {
             }
 
             query = query.substring(0, query.length - 1);
-            query = query.concat(` FROM !tableName ${tableAlias} ${extraQuery} ;`);
+            query = query.concat(` FROM !'tableName' ${tableAlias} ${extraQuery} ;`);
 
             console.log(query);
 
@@ -198,7 +191,7 @@ export default class MySQL {
         extraQuery: string = '',
     ): Promise<insertReturnType> {
         return new Promise((resolve, reject) => {
-            let insertQuery = `INSERT INTO !tableName (`;
+            let insertQuery = `INSERT INTO !'tableName' (`;
             let insertData = `VALUE(`;
             const params: paramsType = {tableName};
 
@@ -252,7 +245,7 @@ export default class MySQL {
         params: paramsType = {},
     ): Promise<any> {
         return new Promise((resolve, reject) => {
-            let updateQuery = `UPDATE !tableName SET `;
+            let updateQuery = `UPDATE !'tableName' SET `;
             params = {...params, tableName};
 
             for (const {name, value, isEncrypted} of columns) {

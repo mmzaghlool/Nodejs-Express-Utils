@@ -32,7 +32,7 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
 
             query = query.replace(RegExp(`:${key}`, 'g'), `"${value}"`);
             // eslint-disable-next-line no-useless-escape
-            query = query.replace(RegExp(`!${key}`, 'g'), '`' + value + '`');
+            query = query.replace(RegExp(`!'${key}'`, 'g'), '`' + value + '`');
         }
     }
 
