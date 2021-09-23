@@ -46,7 +46,7 @@ export default class SequelTable<T> {
         tableAlias?: string,
         columnsAlias?: {[key: string]: string}[],
     ) {
-        const condition = ` ${type} ${table.tableName} ${tableAlias || ''} ON ${joinCondition} `;
+        const condition = ` ${type} \`${table.tableName}\` \`${tableAlias || ''}\` ON ${joinCondition} `;
 
         this._joinedSchemas.push({
             schema: table.schema,

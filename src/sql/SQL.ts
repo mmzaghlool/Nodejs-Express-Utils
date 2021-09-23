@@ -66,7 +66,8 @@ export default class MySQL {
 
         for (let i = 0; i < joinTables.length; i++) {
             const {joinCondition, table, joinType, columnsAlias, tableAlias, reqColumns} = joinTables[i];
-            const condition = ` ${joinType} ${table.tableName} ${tableAlias || ''} ON ${joinCondition} `;
+            const condition = ` ${joinType} \`${table.tableName}\` ${tableAlias ? `\`${tableAlias}\`` : ''} 
+            ON ${joinCondition} `;
 
             tables.push({
                 columns: this.getColumns(table.schema, reqColumns, columnsAlias),
