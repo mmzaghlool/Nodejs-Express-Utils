@@ -88,7 +88,7 @@ export default class MySQL {
         for (const fieldName in schema) {
             if (typeof schema[fieldName] !== 'undefined' && (!reqColumns || reqColumns.includes(fieldName))) {
                 const column: {name: string; as?: string; isEncrypted: boolean} = {
-                    name: `${tableName}.${fieldName}`,
+                    name: `\`${tableName}\`.\`${fieldName}\``,
                     isEncrypted: schema[fieldName].isEncrypted,
                 };
                 if (as) {
@@ -150,26 +150,25 @@ export default class MySQL {
                     if (isEncrypted === true) {
                         // query = query.concat(` &${tableAlias}.${name},`);
                         query = query.concat(
-                            ` CAST(${decrypt(`${tableAlias}.${name}`, this.encryptionKey)} AS ${schema[name].type}),`,
+                            ` CAST(${decrypt(`\`${tableAlias}\`.\`${name}\``, this.encryptionKey)} 
+                                AS ${schema[name].type}),`,
                         );
                     } else if (custom !== undefined) {
                         query = query.concat(` ${custom},`);
                     } else {
-                        query = query.concat(` ${tableAlias}.${name},`);
+                        query = query.concat(` \`${tableAlias}\`.\`${name}\`,`);
                     }
 
                     // With table custom name
                     if (as !== undefined) {
                         query = query.substring(0, query.length - 1);
-                        query = query.concat(` AS ${as},`);
+                        query = query.concat(` AS \`${as}\`,`);
                     }
                 }
             }
 
             query = query.substring(0, query.length - 1);
-            query = query.concat(` FROM !'tableName' ${tableAlias} ${extraQuery} ;`);
-
-            console.log(query);
+            query = query.concat(` FROM !\`tableName\` \`${tableAlias}\` ${extraQuery} ;`);
 
             this.executeQuery(query, {...params, tableName}, schema)
                 .then((result: any[]) => resolve(result))
@@ -191,7 +190,7 @@ export default class MySQL {
         extraQuery: string = '',
     ): Promise<insertReturnType> {
         return new Promise((resolve, reject) => {
-            let insertQuery = `INSERT INTO !'tableName' (`;
+            let insertQuery = `INSERT INTO !\`tableName\` (`;
             let insertData = `VALUE(`;
             const params: paramsType = {tableName};
 
@@ -212,7 +211,7 @@ export default class MySQL {
                         continue;
                     }
 
-                    insertQuery = insertQuery.concat(`${key},`);
+                    insertQuery = insertQuery.concat(`\`${key}\`,`);
 
                     if (isEncrypted === true) insertData = insertData.concat(` #:${key},`);
                     else insertData = insertData.concat(` :${key},`);
@@ -245,15 +244,16 @@ export default class MySQL {
         params: paramsType = {},
     ): Promise<any> {
         return new Promise((resolve, reject) => {
-            let updateQuery = `UPDATE !'tableName' SET `;
+            let updateQuery = `UPDATE !\`tableName\` SET `;
             params = {...params, tableName};
 
             for (const {name, value, isEncrypted} of columns) {
                 params[name] = value;
+
                 if (isEncrypted === true) {
-                    updateQuery = updateQuery.concat(`${name}=#:${name},`);
+                    updateQuery = updateQuery.concat(`\`${name}\`=#:${name},`);
                 } else {
-                    updateQuery = updateQuery.concat(`${name}=:${name},`);
+                    updateQuery = updateQuery.concat(`\`${name}\`=:\`${name}\`,`);
                 }
             }
             updateQuery = updateQuery.substring(0, updateQuery.length - 1);
