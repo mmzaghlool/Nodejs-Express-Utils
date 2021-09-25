@@ -25,6 +25,7 @@ If you need to report an issue or have suggestions feel free to contact me
     1. [Defining the database constrains](#defining-the-database-constrains)
     2. [Defining Models](#defining-models)
     3. [Using Models](#using-models)
+    4. [Joins](#joins)
 2. [MiddleWares](#middlewares)
     1. [XSS Filter](#xss-filter)
     2. [Response Shaper](#response-shaper)
