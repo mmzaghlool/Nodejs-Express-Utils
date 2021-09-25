@@ -1,36 +1,25 @@
 # Nodejs-Express-Utils
 
-A package to containing some useful utils for nodejs apps
-
 [![NPM](https://img.shields.io/npm/v/nodejs-express-utils.svg)](https://www.npmjs.com/package/nodejs-express-utils)
 [![NPM](https://img.shields.io/npm/dt/nodejs-express-utils.svg)](https://www.npmjs.com/package/nodejs-express-utils.svg)
 
-## Installation
+A package to containing some useful middleWares, MYSQL ORM, and other utils for nodejs apps.
 
-```bash
-npm i nodejs-express-utils
-```
+Did you wanted to encrypt your database fields and get stuck in the searching loop, did not find the right ORM or have an issue in the implementation?
 
-## Importing
-
-### Commonjs
-
-```javascript
-const {DataTypes, MySQL, extendedJoi, formBadRequest, middleWares, JOIN_TYPES} = require('nodejs-express-utils');
-```
-
-### ES6
-
-```javascript
-import {DataTypes, MySQL, extendedJoi, formBadRequest, middleWares, JOIN_TYPES} from 'nodejs-express-utils';
-```
+In this package i am trying to solve this problem.
+You will find a useful middle wares solving some common problems and MySQL ORM with the encryption embedded using `AES` algorithms and it's corresponding MySQL functions `AES_ENCRYPT` and `AES_DECRYPT`.
 
 ## Reach Me
+
+_`NOTE THAT`_ THIS PACKAGE IS BETA VERSION
 
 If you need to report an issue or have suggestions feel free to contact me
 
 <a href="https://www.linkedin.com/in/mmzaghlool/"><img align="center" src="https://icon-library.com/images/linkedin-icon-png-transparent-background/linkedin-icon-png-transparent-background-15.jpg" alt="LinkedIn profile" height="40" width="40" /></a>
 <a href="mailto:mmzaghlool52@gmail.com"><img align="center" src="https://cdn.iconscout.com/icon/free/png-256/gmail-2981844-2476484.png" alt="Gmai account" height="40" width="40" /></a>
+
+## Table of content
 
 1. [MySQL](#mysql)
     1. [Defining the database constrains](#defining-the-database-constrains)
@@ -43,6 +32,26 @@ If you need to report an issue or have suggestions feel free to contact me
 3. [Extended Joi](#extended-joi)
 4. [A full example](#a-full-example)
 5. [Promise example](#promise-example)
+
+## [Installation](installation)
+
+```bash
+npm i nodejs-express-utils
+```
+
+## [Importing](importing)
+
+### [Commonjs](commonjs)
+
+```javascript
+const {DataTypes, MySQL, extendedJoi, formBadRequest, middleWares, JOIN_TYPES} = require('nodejs-express-utils');
+```
+
+### [ES6](es6)
+
+```javascript
+import {DataTypes, MySQL, extendedJoi, formBadRequest, middleWares, JOIN_TYPES} from 'nodejs-express-utils';
+```
 
 ## [MySQL](#mysql)
 
@@ -160,7 +169,7 @@ _-_ update(data: {}, extraQuery: string)
 Note that:
 
 1. `data`: An Object containing all the data that will be updated in the database
-2. `extraQuery`: String applied while getting the data containing the where conditions
+2. `extraQuery`: String applied while getting the data containing the `WHERE`, `ORDER BY`, and `LIMIT` conditions
 
 Also if you need to use encrypted fields in the `extraQuery` you can put "`&`" before the column name to decrypt it OR "`&:`" before the variable name to decrypt a variable OR "`#:`" before the variable name to encrypt a variable.
 
@@ -196,6 +205,62 @@ const data = {subject: 'Issue 12134'};
 ContactUs.update(data, extraQuery)
     .then((res) => console.log(res))
     .catch((err) => console.error(err));
+```
+
+### [Joins](#joins)
+
+The next step is joining the models to get select data from multiple tables for that we will use a method called `executeJoin` from the main database connection object as follows:
+
+`masterTable`: Is an object that contain the main table configuration to join other tables with:
+
+-   `table`: _REQUIRED_ The table model
+-   `tableAlias`: _OPTIONAL_ An alias to rename the table with while joining
+-   `columnsAlias`: _OPTIONAL_ Object to rename the columns while joining. In the next example we renamed the column `userUid` to `uid`
+-   `reqColumns`: _OPTIONAL_ The required columns only if not specified all columns will be retrieved. In the next example we want to get only the `id`, `userUid`, and `subject` from the contactUs model
+
+`tables`: Is an array of objects that contain the joined tables configuration:
+
+-   `table`: _REQUIRED_ The table model
+-   `tableAlias`: _OPTIONAL_ An alias to rename the table with while joining. in the next example we renamed `Person` to `p`
+-   `columnsAlias`: _OPTIONAL_ Object to rename the columns while joining.
+-   `reqColumns`: _OPTIONAL_ The required columns only if not specified all columns will be retrieved.
+-   `joinType`: Is the type of join one the the following `INNER`, `LEFT_OUTER`, `RIGHT_OUTER`, `FULL_OUTER`
+-   `joinCondition`: Is the condition of the join
+
+Also here you can use the same `extraQuery` and `params` that used [before](#using-models) in the same way
+
+```TS
+import {MasterTableType, JoinedTablesType} from 'nodejs-express-utils';
+import database from '../core/database';
+import ContactUs from '../models/ContactUs';
+import Person from '../models/Person';
+
+const masterTable: MasterTableType = {
+    table: ContactUs,
+    tableAlias: 'c',
+    columnsAlias: {userUid: 'uid'},
+    reqColumns: ['id', 'userUid', 'subject'],
+};
+
+const tables: JoinedTablesType = [
+    {
+        table: Person,
+        tableAlias: 'p',
+        // columnsAlias: {},
+        // reqColumns: undefined,
+        joinType: JOIN_TYPES.LEFT_OUTER,
+        joinCondition: 'p.uid=c.userUid',
+    },
+];
+
+
+const extraQuery = 'WHERE timestamp=:timestamp';
+const params = {timestamp: 1632049210};
+
+database
+    .executeJoin(masterTable, tables, extraQuery, params)
+    .then((res) => console.log('res', res))
+    .catch((err) => console.error('err', err));
 ```
 
 ## [MiddleWares](#middlewares)
