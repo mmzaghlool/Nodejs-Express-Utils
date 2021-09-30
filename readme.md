@@ -1,7 +1,7 @@
 # Nodejs-Express-Utils
 
-[![NPM](https://img.shields.io/npm/v/nodejs-express-utils.svg)](https://www.npmjs.com/package/nodejs-express-utils)
-[![NPM](https://img.shields.io/npm/dt/nodejs-express-utils.svg)](https://www.npmjs.com/package/nodejs-express-utils.svg)
+![NPM](https://img.shields.io/npm/v/nodejs-express-utils.svg)
+![NPM](https://img.shields.io/npm/dt/nodejs-express-utils.svg)
 
 A package to containing some useful middleWares, MYSQL ORM, and other utils for nodejs apps.
 

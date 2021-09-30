@@ -24,14 +24,14 @@ export type JoinedSchemasType = {
 }[];
 
 export type MasterTableType = {
-    table: SequelTable<any>;
+    table: SequelTable<unknown>;
     tableAlias?: string;
     reqColumns?: string[];
     columnsAlias?: {[key: string]: string};
 };
 
 export type JoinedTablesType = {
-    table: SequelTable<any>;
+    table: SequelTable<unknown>;
     joinType: JOIN_TYPES;
     joinCondition: string;
     tableAlias?: string;

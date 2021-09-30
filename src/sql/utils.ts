@@ -30,6 +30,8 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
         if (Object.prototype.hasOwnProperty.call(params, key)) {
             const value = params[key];
 
+            query = query.replace(RegExp(`#:${key}`, 'g'), `${encrypt(`"${params[key]}"`, encryptionKey)}`);
+
             query = query.replace(RegExp(`:${key}`, 'g'), `"${value}"`);
             query = query.replace(RegExp(`:\`${key}\``, 'g'), `"${value}"`);
             query = query.replace(RegExp(`!\`${key}\``, 'g'), '`' + value + '`');

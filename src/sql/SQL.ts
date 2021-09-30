@@ -62,7 +62,10 @@ export default class MySQL {
             tableAlias,
         });
         let query = '';
-        let jSchema = msTable.schema;
+        let jSchema: {[key: string]: any} = this.getAliasedSchema(
+            tableAlias ? tableAlias : msTable.tableName,
+            msTable.schema,
+        );
 
         for (let i = 0; i < joinTables.length; i++) {
             const {joinCondition, table, joinType, columnsAlias, tableAlias, reqColumns} = joinTables[i];
@@ -77,11 +80,23 @@ export default class MySQL {
 
             query = query.concat(condition);
 
-            jSchema = {...jSchema, ...table.schema};
+            jSchema = {...jSchema, ...this.getAliasedSchema(tableAlias ? tableAlias : table.tableName, table.schema)};
         }
         query = query.concat(extraQuery);
 
         return this.getCustomData(jSchema, tables, query, params);
+    }
+
+    private getAliasedSchema(alias: string, schema: {[key: string]: any}) {
+        const res: {[key: string]: any} = {};
+        for (const key in schema) {
+            if (Object.prototype.hasOwnProperty.call(schema, key)) {
+                const element = schema[key];
+                res[`${alias}.${key}`] = element;
+            }
+        }
+
+        return {...schema, ...res};
     }
 
     public static getColumns(schema: DatabaseSchema, tableName: string, as?: string, reqColumns?: string[]) {
@@ -110,7 +125,11 @@ export default class MySQL {
      */
     executeQuery(query: string, params: paramsType = {}, schema: DatabaseSchema = {}): Promise<any> {
         return new Promise((resolve, reject) => {
+            console.log(query);
             query = parseQuery(query, params, schema, this.encryptionKey);
+
+            console.log(query);
+            console.log(params, schema, this.encryptionKey);
 
             this.database.query(query, function (error: mysql.MysqlError, results: any) {
                 if (error) reject(error);
