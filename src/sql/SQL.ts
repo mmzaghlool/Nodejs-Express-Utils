@@ -125,11 +125,7 @@ export default class MySQL {
      */
     executeQuery(query: string, params: paramsType = {}, schema: DatabaseSchema = {}): Promise<any> {
         return new Promise((resolve, reject) => {
-            console.log(query);
             query = parseQuery(query, params, schema, this.encryptionKey);
-
-            console.log(query);
-            console.log(params, schema, this.encryptionKey);
 
             this.database.query(query, function (error: mysql.MysqlError, results: any) {
                 if (error) reject(error);
