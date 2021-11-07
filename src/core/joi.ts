@@ -9,9 +9,14 @@ interface ExtendedInterface extends Joi.Root {
     timestamp(): Joi.Root;
 
     /**
-     * Generates a schema object that matches a MYSQL AI id (Numeric value between 1 and 9999999999).
+     * Generates a schema object that matches a MYSQL AI UNSIGNED INT(10) id (Numeric value between 1 and 4294967295).
      */
     id(): Joi.Root;
+
+    /**
+     * Generates a schema object that matches a MYSQL AI UNSIGNED BIGINT(20) id (Numeric value between 1 and 18446744073709551615).
+     */
+    bigId(): Joi.Root;
 
     /**
      * Generates a schema object that matches a firebase uid (string with length of 28 and only contain alphanumeric).
@@ -92,7 +97,12 @@ function buildJoiWithExtensions() {
 
     extendedJoi = extendedJoi.extend((joi) => ({
         type: 'id',
-        base: joi.number().min(1).max(9999999999),
+        base: joi.number().min(1).max(4294967295),
+    }));
+
+    extendedJoi = extendedJoi.extend((joi) => ({
+        type: 'bigId',
+        base: joi.number().min(1).max(18446744073709551615),
     }));
 
     extendedJoi = extendedJoi.extend((joi) => ({
