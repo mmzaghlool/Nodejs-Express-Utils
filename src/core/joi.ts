@@ -140,7 +140,7 @@ function buildJoiWithExtensions() {
 
     extendedJoi = extendedJoi.extend((joi) => ({
         type: 'email',
-        base: joi.string().pattern(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i),
+        base: joi.string().pattern(/^[A-Z0-9._%+-]+@[A-Z0-9.-]{2,}.[A-Z]{2,4}$/i),
     }));
 
     extendedJoi = extendedJoi.extend((joi) => ({
