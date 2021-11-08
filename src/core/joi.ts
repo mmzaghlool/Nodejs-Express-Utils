@@ -202,6 +202,7 @@ function buildJoiWithExtensions() {
  *
  * @member timestamp
  * @member id
+ * @member bigId
  * @member uid
  * @member nid
  * @member landPhone
@@ -214,7 +215,7 @@ function buildJoiWithExtensions() {
  * @member date
  * @member ip
  * @member packageName
- * @member link
+ * @member extendedLink
  */
 const extendedJoi = buildJoiWithExtensions();
 
