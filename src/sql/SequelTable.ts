@@ -19,7 +19,6 @@ export default class SequelTable<T> {
     private _schema: DatabaseSchema;
     private _tableName: string;
     private _mysql: MySQL;
-    private _joinedSchemas: JoinedSchemasType = [];
 
     constructor(tableName: string, schema: DatabaseSchema, mysql: MySQL) {
         this._schema = schema;
@@ -31,67 +30,8 @@ export default class SequelTable<T> {
         return this._tableName;
     }
 
-    public get joinedSchemas(): JoinedSchemasType {
-        return this._joinedSchemas;
-    }
-
     public get schema(): DatabaseSchema {
         return this._schema;
-    }
-
-    public join(
-        table: SequelTable<any>,
-        type: JOIN_TYPES,
-        joinCondition: string,
-        tableAlias?: string,
-        columnsAlias?: {[key: string]: string}[],
-    ) {
-        const condition = ` ${type} \`${table.tableName}\` \`${tableAlias || ''}\` ON ${joinCondition} `;
-
-        this._joinedSchemas.push({
-            schema: table.schema,
-            tableName: table.tableName,
-            condition,
-            alias: tableAlias,
-            columnsAlias,
-        });
-        this._joinedSchemas.push(...table.joinedSchemas);
-
-        return this;
-    }
-
-    public executeJoin(extraQuery: string = '', params: paramsType = {}, reqColumns?: string[]) {
-        const {_joinedSchemas, _schema, _mysql, _tableName} = this;
-        const tables: {columns: getColumnsType; tableName: string; tableAlias?: string}[] = [];
-        tables.push({columns: this.getColumns(_schema, reqColumns), tableName: _tableName});
-        let query = '';
-        let jSchema = _schema;
-
-        for (let i = 0; i < _joinedSchemas.length; i++) {
-            // TODO:
-            const {condition, schema, alias, tableName, columnsAlias} = _joinedSchemas[i];
-
-            tables.push({columns: this.getColumns(schema, reqColumns), tableName, tableAlias: alias});
-            query = query.concat(condition);
-
-            jSchema = {...jSchema, ...schema};
-        }
-        query = query.concat(extraQuery);
-
-        this._joinedSchemas = [];
-        return _mysql.getCustomData(jSchema, tables, query, params);
-    }
-
-    private getColumns(schema: DatabaseSchema, reqColumns?: string[]) {
-        const columns: getColumnsType = [];
-
-        for (const fieldName in schema) {
-            if (typeof schema[fieldName] !== 'undefined' && (!reqColumns || reqColumns.includes(fieldName))) {
-                columns.push({name: fieldName, as: fieldName, isEncrypted: schema[fieldName].isEncrypted});
-            }
-        }
-
-        return columns;
     }
 
     /**
