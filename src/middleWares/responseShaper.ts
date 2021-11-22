@@ -30,9 +30,9 @@ app.get(
 );
  */
 export default function handleResponse(handler: Function) {
-    return async function (req: Request, res: Response, next: NextFunction) {
+    return async function (req: any, res: Response, next: NextFunction) {
         try {
-            const data = {...req.query, ...req.params, originalUrl: req.originalUrl, ...req.body};
+            const data = {...req.query, ...req.params, originalUrl: req.originalUrl, ...req.body, ...req.locals};
             req.body = data;
 
             const result = await handler(data);
