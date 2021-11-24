@@ -2,6 +2,8 @@
 
 ![NPM](https://img.shields.io/npm/v/nodejs-express-utils.svg)
 ![NPM](https://img.shields.io/npm/dt/nodejs-express-utils.svg)
+![NPM](https://img.shields.io/npm/dm/nodejs-express-utils.svg)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/nodejs-express-utils)
 
 A package to containing some useful middleWares, MYSQL ORM, and other utils for nodejs apps.
 
@@ -12,12 +14,10 @@ You will find a useful middle wares solving some common problems and MySQL ORM w
 
 ## Reach Me
 
-_`NOTE THAT`_ THIS PACKAGE IS BETA VERSION
-
 If you need to report an issue or have suggestions feel free to contact me
 
 <a href="https://www.linkedin.com/in/mmzaghlool/"><img align="center" src="https://icon-library.com/images/linkedin-icon-png-transparent-background/linkedin-icon-png-transparent-background-15.jpg" alt="LinkedIn profile" height="40" width="40" /></a>
-<a href="mailto:mmzaghlool52@gmail.com"><img align="center" src="https://cdn.iconscout.com/icon/free/png-256/gmail-2981844-2476484.png" alt="Gmai account" height="40" width="40" /></a>
+<a href="mailto:mmzaghlool52@gmail.com"><img align="center" src="https://cdn.iconscout.com/icon/free/png-256/gmail-2981844-2476484.png" alt="Gmail account" height="40" width="40" /></a>
 
 ## Table of content
 
