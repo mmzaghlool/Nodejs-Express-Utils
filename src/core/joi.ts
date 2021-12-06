@@ -46,27 +46,27 @@ interface ExtendedInterface extends Joi.Root {
     /**
      * Generates a schema object that matches the emails.
      */
-    email(): Joi.Root;
+    email(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the english alphabetic only.
      */
-    english(): Joi.Root;
+    english(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the arabic alphabetic only.
      */
-    arabic(): Joi.Root;
+    arabic(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the english alphabetic with spaces.
      */
-    extraEnglish(): Joi.Root;
+    extraEnglish(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the arabic alphabetic with spaces.
      */
-    extraArabic(): Joi.Root;
+    extraArabic(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the date 'YYYY-MM-DD'.
