@@ -71,22 +71,27 @@ interface ExtendedInterface extends Joi.Root {
     /**
      * Generates a schema object that matches the date 'YYYY-MM-DD'.
      */
-    extendedDate(): Joi.Root;
+    extendedDate(): Joi.StringSchema;
+
+    /**
+     * Generates a schema object that matches the date 'YYYY-MM-DDTHH:mm:ssZ'.
+     */
+     isoDate(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the ip v4.
      */
-    ip(): Joi.Root;
+    ip(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the package names.
      */
-    packageName(): Joi.Root;
+    packageName(): Joi.StringSchema;
 
     /**
      * Generates a schema object that matches the links.
      */
-    extendedLink(): Joi.Root;
+    extendedLink(): Joi.StringSchema;
 }
 
 function buildJoiWithExtensions() {
@@ -191,6 +196,15 @@ function buildJoiWithExtensions() {
             ),
     }));
 
+    extendedJoi = extendedJoi.extend((joi) => ({
+        type: 'isoDate',
+        base: joi
+            .string()
+            .pattern(
+                /^(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))$|^(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))$|^(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))$/,
+            ),
+    }));
+
     return extendedJoi;
 }
 /**
@@ -216,6 +230,7 @@ function buildJoiWithExtensions() {
  * @member ip
  * @member packageName
  * @member extendedLink
+ * @member isoDate
  */
 const extendedJoi = buildJoiWithExtensions();
 
