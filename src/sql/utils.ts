@@ -44,7 +44,7 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
 
         while (exec !== null) {
             const key = exec[0].substr(1);
-            query = query.replace(RegExp(`&${key}`, 'g'),  `CAST(${decrypt(key, encryptionKey)} AS CHAR)`);
+            query = query.replace(RegExp(`&${key}`, 'g'), `CAST(${decrypt(key, encryptionKey)} AS CHAR)`);
 
             exec = RegExp('&[a-zA-Z.]+', 'g').exec(query);
         }

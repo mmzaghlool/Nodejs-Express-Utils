@@ -37,7 +37,9 @@ export default function handleResponse(handler: Function) {
 
             const result = await handler(data);
 
-            if (result.status === 400) {
+            if (typeof result !== 'object') {
+                errorResponse(res, 'Server error handleResponse function must return object');
+            } else if (result.status === 400) {
                 badRequestResponse(res, result.code);
             } else {
                 successResponse(res, result);
