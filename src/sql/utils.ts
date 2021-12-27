@@ -38,7 +38,7 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
         }
     }
 
-    if (RegExp('&[a-zA-Z.]+', 'g').test(query)) {
+    if (RegExp(' &[a-zA-Z.]+', 'g').test(query)) {
         let exec = RegExp('&[a-zA-Z.]+', 'g').exec(query);
         console.log('exec: ', exec);
 
@@ -50,9 +50,7 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
         }
     }
 
-    console.log(`RegExp(#'([a-zA-Z]+)', 'g').test(query)`, RegExp(`#'([a-zA-Z]+)'`, 'g').test(query));
-
-    if (RegExp(`#'([a-zA-Z]+)'`, 'g').test(query)) {
+    if (RegExp(` #'([a-zA-Z]+)'`, 'g').test(query)) {
         let exec = RegExp(`#'([a-zA-Z]+)'`, 'g').exec(query);
         console.log('exec: ', exec);
 
