@@ -13,15 +13,24 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
     for (const key in schema) {
         if (Object.prototype.hasOwnProperty.call(schema, key)) {
             const {type} = schema[key];
+            const value = params[key];
 
             query = query.replace(RegExp(`&${key}`, 'g'), `CAST(${decrypt(key, encryptionKey)} AS ${type})`);
 
             // Encrypt or Decrypt with variable
-            query = query.replace(RegExp(`#:${key}`, 'g'), `${encrypt(`\`${params[key]}\``, encryptionKey)}`);
-            query = query.replace(
-                RegExp(`&:${key}`, 'g'),
-                `CAST(${decrypt(`${params[key]}`, encryptionKey)} AS ${type})`,
-            );
+            if (RegExp(`#:${key}`, 'g').test(query)) {
+                // query = query.replace(RegExp(`#:${key}`, 'g'), `${encrypt(`"${value}"`, encryptionKey)}`);
+                query = query.replace(
+                    RegExp(`#:${key}`, 'g'),
+                    `${encrypt(`"${value.replace(RegExp(`"`, 'g'), '\\"')}"`, encryptionKey)}`,
+                );
+            }
+            if (RegExp(`&:${key}`, 'g').test(query)) {
+                query = query.replace(
+                    RegExp(`&:${key}`, 'g'),
+                    `CAST(${decrypt(`${value}`, encryptionKey)} AS ${type})`,
+                );
+            }
         }
     }
 
@@ -30,7 +39,12 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
         if (Object.prototype.hasOwnProperty.call(params, key)) {
             const value = params[key];
 
-            query = query.replace(RegExp(`#:${key}`, 'g'), `${encrypt(`\`${params[key]}\``, encryptionKey)}`);
+            if (RegExp(`#:${key}`, 'g').test(query)) {
+                query = query.replace(
+                    RegExp(`#:${key}`, 'g'),
+                    `${encrypt(`"${value.replace(RegExp(`"`, 'g'), '\\"')}"`, encryptionKey)}`,
+                );
+            }
 
             query = query.replace(RegExp(`:${key}`, 'g'), `"${value}"`);
             query = query.replace(RegExp(`:\`${key}\``, 'g'), `"${value}"`);
@@ -71,7 +85,7 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
  * @return {String}
  */
 export function encrypt(value: string, encryptionKey: string): string {
-    return `AES_ENCRYPT(${value}, "${encryptionKey}")`;
+    return `AES_ENCRYPT(${value}, '${encryptionKey}')`;
 }
 
 /**
