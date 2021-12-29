@@ -52,6 +52,7 @@ export default class MySQL {
         joinTables: JoinedTablesType,
         extraQuery: string = '',
         params: paramsType = {},
+        customFields: string[] = [],
     ) {
         const tables: {columns: getColumnsType; tableName: string; tableAlias?: string}[] = [];
         const {table: msTable, columnsAlias, reqColumns, tableAlias} = masterTable;
@@ -84,7 +85,7 @@ export default class MySQL {
         }
         query = query.concat(extraQuery);
 
-        return this.getCustomData(jSchema, tables, query, params);
+        return this.getCustomData(jSchema, tables, query, params, customFields);
     }
 
     private getAliasedSchema(alias: string, schema: {[key: string]: any}) {
@@ -153,11 +154,16 @@ export default class MySQL {
         }[],
         extraQuery: string = '',
         params: paramsType = {},
+        customFields: string[] = [],
     ): Promise<any[]> {
         return new Promise((resolve, reject) => {
             let query = `SELECT`;
             const tableName: string = tables[0].tableName;
             const tableAlias: string = tables[0].tableAlias || tableName;
+
+            for (const customField of customFields) {
+                query = query.concat(` ${customField},`);
+            }
 
             for (let {columns, tableName, tableAlias} of tables) {
                 tableAlias = tableAlias || tableName;

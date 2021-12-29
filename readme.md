@@ -230,6 +230,8 @@ The next step is joining the models to get select data from multiple tables for 
 
 Also here you can use the same `extraQuery` and `params` that used [before](#using-models) in the same way
 
+PS. IF you need to add custom fields to your query such as `COUNT` OR `SUM` ... etc. you can add it to the optional array `customFields`
+
 ```TS
 import {MasterTableType, JoinedTablesType} from 'nodejs-express-utils';
 import database from '../core/database';
@@ -258,8 +260,10 @@ const tables: JoinedTablesType = [
 const extraQuery = 'WHERE timestamp=:timestamp';
 const params = {timestamp: 1632049210};
 
+const customFields = ['COUNT(P.postId) AS COUNT']
+
 database
-    .executeJoin(masterTable, tables, extraQuery, params)
+    .executeJoin(masterTable, tables, extraQuery, params, customFields)
     .then((res) => console.log('res', res))
     .catch((err) => console.error('err', err));
 ```
