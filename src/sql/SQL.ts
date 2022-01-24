@@ -8,7 +8,6 @@ import {
     paramsType,
     insertReturnType,
     updateColumnsType,
-    JoinedSchemasType,
     JoinedTablesType,
     MasterTableType,
 } from './types';
@@ -21,6 +20,10 @@ export default class MySQL {
     constructor(config: MySQLConfig, encryptionKey: string) {
         this.database = mysql.createConnection(config);
         this.encryptionKey = encryptionKey;
+    }
+
+    public get databaseConnection(): mysql.Connection {
+        return this.database;
     }
 
     private getColumns(schema: DatabaseSchema, reqColumns?: string[], columnsAlias: {[key: string]: string} = {}) {

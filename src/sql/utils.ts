@@ -13,7 +13,12 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
     for (const key in schema) {
         if (Object.prototype.hasOwnProperty.call(schema, key)) {
             const {type} = schema[key];
-            const value = params[key];
+            let value;
+            if (typeof params[key] !== 'undefined') {
+                value = String(params[key]);
+            } else {
+                continue;
+            }
 
             query = query.replace(RegExp(`&${key}`, 'g'), `CAST(${decrypt(key, encryptionKey)} AS ${type})`);
 
