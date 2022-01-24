@@ -57,27 +57,27 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
         }
     }
 
-    if (RegExp(' &[a-zA-Z.]+', 'g').test(query)) {
-        let exec = RegExp('&[a-zA-Z.]+', 'g').exec(query);
+    if (RegExp(' &[a-zA-Z0-9.]+', 'g').test(query)) {
+        let exec = RegExp('&[a-zA-Z0-9.]+', 'g').exec(query);
         console.log('exec: ', exec);
 
         while (exec !== null) {
             const key = exec[0].substr(1);
             query = query.replace(RegExp(`&${key}`, 'g'), `CAST(${decrypt(key, encryptionKey)} AS CHAR)`);
 
-            exec = RegExp('&[a-zA-Z.]+', 'g').exec(query);
+            exec = RegExp('&[a-zA-Z0-9.]+', 'g').exec(query);
         }
     }
 
-    if (RegExp(` #'([a-zA-Z]+)'`, 'g').test(query)) {
-        let exec = RegExp(`#'([a-zA-Z]+)'`, 'g').exec(query);
+    if (RegExp(` #'([a-zA-Z0-9]+)'`, 'g').test(query)) {
+        let exec = RegExp(`#'([a-zA-Z0-9]+)'`, 'g').exec(query);
         console.log('exec: ', exec);
 
         while (exec !== null) {
             const key = exec[0].substr(1);
             query = query.replace(RegExp(`#${key}`, 'g'), encrypt(key, encryptionKey));
 
-            exec = RegExp(`#'([a-zA-Z]+)'`, 'g').exec(query);
+            exec = RegExp(`#'([a-zA-Z0-9]+)'`, 'g').exec(query);
         }
     }
 
