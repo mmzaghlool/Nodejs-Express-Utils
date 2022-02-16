@@ -59,7 +59,6 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
 
     if (RegExp(' &[a-zA-Z0-9.]+', 'g').test(query)) {
         let exec = RegExp('&[a-zA-Z0-9.]+', 'g').exec(query);
-        console.log('exec: ', exec);
 
         while (exec !== null) {
             const key = exec[0].substr(1);
@@ -71,7 +70,6 @@ export function parseQuery(query: string, params: paramsType, schema: DatabaseSc
 
     if (RegExp(` #'([a-zA-Z0-9]+)'`, 'g').test(query)) {
         let exec = RegExp(`#'([a-zA-Z0-9]+)'`, 'g').exec(query);
-        console.log('exec: ', exec);
 
         while (exec !== null) {
             const key = exec[0].substr(1);
